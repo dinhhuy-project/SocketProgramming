@@ -17,6 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -46,7 +47,7 @@ public class UI extends JFrame {
 
   public UI() {
     setTitle("Messenger - Java Chat");
-    setSize(400, 500);
+    setSize(600, 800);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLayout(new BorderLayout());
 
@@ -54,18 +55,18 @@ public class UI extends JFrame {
     textPane = new JTextPane();
     textPane.setEditable(false);
     textPane.setMargin(new Insets(10, 10, 10, 10));
-    textPane.setFont(new Font("Arial", Font.PLAIN, 16));
+    textPane.setFont(new Font("Arial", Font.PLAIN, 18));
     doc = textPane.getStyledDocument();
 
     // Tạo style căn trái
     leftAlign = new SimpleAttributeSet();
     StyleConstants.setAlignment(leftAlign, StyleConstants.ALIGN_LEFT);
-    StyleConstants.setFontSize(leftAlign, 16);
+    StyleConstants.setFontSize(leftAlign, 18);
 
     // Tạo style căn phải
     rightAlign = new SimpleAttributeSet();
     StyleConstants.setAlignment(rightAlign, StyleConstants.ALIGN_RIGHT);
-    StyleConstants.setFontSize(rightAlign, 16);
+    StyleConstants.setFontSize(rightAlign, 18);
 
     add(new JScrollPane(textPane), BorderLayout.CENTER);
 
@@ -78,8 +79,10 @@ public class UI extends JFrame {
 
     IPField = new JTextField();
     IPField.setBorder(BorderFactory.createTitledBorder("IP Address"));
+    IPField.setFont(new Font("Arial", Font.ROMAN_BASELINE, 18));
     messageField = new JTextField();
     messageField.setBorder(BorderFactory.createTitledBorder("Message"));
+    messageField.setFont(new Font("Arial", Font.ROMAN_BASELINE, 18));
     sendButton = new JButton("Send");
 
     JPanel fieldsPanel = new JPanel(new BorderLayout());
@@ -100,10 +103,10 @@ public class UI extends JFrame {
 
     JLabel ipLabel = new JLabel();
     try {
-        String localIP = InetAddress.getLocalHost().getHostAddress();
-        ipLabel.setText("My IP: " + localIP + ":" + SERVER_PORT);
+      String localIP = InetAddress.getLocalHost().getHostAddress();
+      ipLabel.setText("My IP: " + localIP + ":" + SERVER_PORT);
     } catch (UnknownHostException e) {
-        ipLabel.setText("My IP: Unknown");
+      ipLabel.setText("My IP: Unknown");
     }
     ipLabel.setBorder(new EmptyBorder(5, 5, 5, 5));
     statusPanel.add(ipLabel, BorderLayout.EAST);
@@ -118,6 +121,7 @@ public class UI extends JFrame {
     });
     messageField.addActionListener(e -> sendMessage());
 
+    setLocationRelativeTo(null);
     setVisible(true);
     new Peer();
   }
@@ -181,6 +185,8 @@ public class UI extends JFrame {
         statusLabel.setForeground(Color.GREEN);
       } catch (IOException e) {
         System.out.println("IP Address's not existed!");
+        JOptionPane.showMessageDialog(this, "Connection Failed: IP Address does not exist!", "Connection Error",
+            JOptionPane.ERROR_MESSAGE);
         statusLabel.setText("Connection Failed");
         statusLabel.setForeground(Color.RED);
         return;
