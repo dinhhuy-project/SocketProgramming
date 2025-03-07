@@ -33,7 +33,7 @@ public class PongServer extends JFrame {
     try {
       stopped = false;
       serverSocket = new ServerSocket(PORT);
-      String serverIP = NetworkScanner.getHostPrivateAddress().getHostName();
+      String serverIP = NetworkScanner.getHostPrivateAddress();
       System.out.println(serverIP + " listening on port: " + PORT);
       while (!stopped) {
         Socket socket = serverSocket.accept();

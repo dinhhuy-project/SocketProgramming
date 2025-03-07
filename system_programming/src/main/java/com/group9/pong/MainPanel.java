@@ -71,7 +71,7 @@ public class MainPanel extends JPanel {
         String hostIp = serverList.getSelectedValue();
         if (hostIp == null) return;
 
-        String myIp = NetworkScanner.getHostPrivateAddress().getHostAddress();
+        String myIp = NetworkScanner.getHostPrivateAddress();
         if (!hostIp.split(":")[0].equals(myIp)) {
           game = new PongPanel();
           main.remove(this);
@@ -91,7 +91,7 @@ public class MainPanel extends JPanel {
         String value = serverList.getSelectedValue();
         if (value == null) return;
 
-        String myIp = NetworkScanner.getHostPrivateAddress().getHostAddress();
+        String myIp = NetworkScanner.getHostPrivateAddress();
         joinButton.setVisible(value != null && !value.isBlank());
         joinButton.setEnabled(true);
         if (value.split(":")[0].equals(myIp)) {

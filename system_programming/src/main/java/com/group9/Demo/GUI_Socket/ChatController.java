@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.net.*;
 
 import javax.swing.JOptionPane;
-import javax.swing.text.BadLocationException;
 
 import com.group9.Demo.GUI_Socket.ChatView.ConnectionStatus;
 import com.group9.net.NetworkScanner;
@@ -16,10 +15,8 @@ public class ChatController {
   private ChatView view;
 
   private static final int SERVER_PORT = 8079;
-  private static final int CLIENT_PORT = 8078;
-
-  private PrintWriter out;
   private Socket clientSocket;
+  private PrintWriter out;
 
   public ChatController(ChatView view) {
     this.view = view;

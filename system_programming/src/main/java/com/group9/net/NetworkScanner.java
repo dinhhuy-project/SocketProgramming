@@ -58,7 +58,7 @@ public class NetworkScanner {
         if (ni.isLoopback() || !ni.isUp()) break;
         while (addresses.hasMoreElements()) {
           InetAddress addr = addresses.nextElement();
-          if (!addr.isLoopbackAddress()) {
+          if (!addr.isLoopbackAddress() && addr instanceof Inet4Address) {
             return addr.getHostAddress();
           }
         }
