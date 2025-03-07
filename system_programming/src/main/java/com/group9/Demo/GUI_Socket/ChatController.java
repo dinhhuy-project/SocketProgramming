@@ -87,16 +87,17 @@ public class ChatController {
     while ((message = in.readLine()) != null) {
       System.out.println("received from other device: " + message);
       view.insertMessage(
-        "[" + clientSocket.getInetAddress().getHostAddress() + "]" + message + "\n"
+        "[" + clientSocket.getInetAddress().getHostAddress() + "]: " + message + "\n"
       );
     }
   }
 
   private void sendMessage() {
+    if (out == null) return;
     String message = view.getMessageText().trim();
     if (!message.isEmpty()) {
       out.println(message);
-      view.insertMessage("[You]" + message + "\n");
+      view.insertMessage("[You]: " + message + "\n");
       view.clearMessageField();
     }
   }
