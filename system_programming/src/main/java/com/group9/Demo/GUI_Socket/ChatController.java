@@ -26,12 +26,12 @@ public class ChatController {
     String localIP = NetworkScanner.getHostPrivateAddress();
     view.setIpLabel(localIP);
 
-    view.onMessageActionPerformed(() -> sendmessage());
+    view.onMessageActionPerformed(() -> sendMessage());
     view.onSendPressed(() -> {
       if (clientSocket == null || clientSocket.isClosed()) {
-        startClient();
+        new Thread(() -> startClient()).start();
       }
-      sendmessage();
+      sendMessage();
     });
   }
 
@@ -48,14 +48,9 @@ public class ChatController {
       view.setConnectionStatus(ConnectionStatus.CONNECTED);
 
       BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-      String message;
-      while ((message = input.readLine()) != null) {
-        System.out.println("received from other device: " + message);
-        view.insertMessage(message);
+      while(!clientSocket.isClosed()) {
+        receiveMessage(input);
       }
-
-      clientSocket.close();
     } catch (IOException e) {
       System.err.println(e.getMessage());
       System.exit(1);
@@ -66,9 +61,14 @@ public class ChatController {
     try {
       String peer_ip = view.getTargetIp();
       clientSocket = new Socket(peer_ip, SERVER_PORT);
-      out = new PrintWriter(clientSocket.getOutputStream(), true);
       System.out.println("Connected to " + peer_ip + ":" + SERVER_PORT);
+      out = new PrintWriter(clientSocket.getOutputStream(), true);
       view.setConnectionStatus(ConnectionStatus.CONNECTED);
+
+      BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+      while (!clientSocket.isClosed()) {
+        receiveMessage(input);
+      }
     } catch (IOException e) {
       System.out.println("Host not found!");
       JOptionPane.showMessageDialog(
@@ -82,11 +82,21 @@ public class ChatController {
     }
   }
 
-  private void sendmessage() {
+  private void receiveMessage(BufferedReader in) throws IOException {
+    String message;
+    while ((message = in.readLine()) != null) {
+      System.out.println("received from other device: " + message);
+      view.insertMessage(
+        "[" + clientSocket.getInetAddress().getHostAddress() + "]" + message + "\n"
+      );
+    }
+  }
+
+  private void sendMessage() {
     String message = view.getMessageText().trim();
     if (!message.isEmpty()) {
       out.println(message);
-      view.insertMessage(message + "\n");
+      view.insertMessage("[You]" + message + "\n");
       view.clearMessageField();
     }
   }
