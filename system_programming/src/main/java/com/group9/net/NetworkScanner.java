@@ -7,10 +7,10 @@ import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.concurrent.Future;
 
 public class NetworkScanner {
   static final int PORT_PRIMARY = 8079;  // Change this to the port you want to check
@@ -50,7 +50,7 @@ public class NetworkScanner {
     }
   }
 
-  public static InetAddress getHostPrivateAddress() {
+  public static String getHostPrivateAddress() {
     try {
       Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
       while (interfaces.hasMoreElements()) {
@@ -59,14 +59,17 @@ public class NetworkScanner {
         if (ni.isLoopback() || !ni.isUp()) break;
         while (addresses.hasMoreElements()) {
           InetAddress addr = addresses.nextElement();
-          if (!addr.isLoopbackAddress() && addr instanceof Inet4Address) {
-            return addr;
+          if (!addr.isLoopbackAddress()) {
+            return addr.getHostAddress();
           }
         }
       }
+      return InetAddress.getLocalHost().getHostAddress();
     } catch (SocketException ex) {
       System.err.println("Socket Error:" + ex.getMessage());
+    } catch (UnknownHostException ex) {
+      System.err.println("Socket Error:" + ex.getMessage());
     }
-    return null;
+    return "Unknown";
   }
 }

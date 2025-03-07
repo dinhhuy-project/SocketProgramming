@@ -26,7 +26,7 @@ public class ChatController {
 
     new Thread(() -> startServer()).start();
     view.onMessageActionPerformed(e -> sendmessage());
-    String localIP = NetworkScanner.getHostPrivateAddress().getHostAddress();
+    String localIP = NetworkScanner.getHostPrivateAddress();
     view.setIpLabel(localIP);
   }
 
