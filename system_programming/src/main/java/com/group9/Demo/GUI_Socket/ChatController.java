@@ -44,7 +44,7 @@ public class ChatController {
     try (ServerSocket serversocket = new ServerSocket(SERVER_PORT)) {
       System.out.println("server is listening on port " + SERVER_PORT);
       clientSocket = serversocket.accept();
-      out = new PrintWriter(clientSocket.getOutputStream());
+      out = new PrintWriter(clientSocket.getOutputStream(), true);
       view.setConnectionStatus(ConnectionStatus.CONNECTED);
 
       BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
