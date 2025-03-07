@@ -2,7 +2,6 @@ package com.group9.pong;
 
 import java.awt.event.*;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.awt.*;
 import javax.swing.*;
 
@@ -10,11 +9,6 @@ import com.group9.net.NetworkScanner;
 
 public class Pong {
   public static void main( String[] args ) throws IOException {
-    // InetAddress addr = NetworkScanner.getHostPrivateAddress();
-    // if (addr != null) {
-    //   System.out.println(addr.getHostAddress());
-    // }
-
     NetworkScanner.main(args);
     JFrame frame = new JFrame("Pong Game");
     GamePanel panel = new GamePanel();
