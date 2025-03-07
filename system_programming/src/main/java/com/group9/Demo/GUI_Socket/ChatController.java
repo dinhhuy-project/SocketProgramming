@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 
 import com.group9.Demo.GUI_Socket.ChatView.ConnectionStatus;
+import com.group9.net.NetworkScanner;
 
 public class ChatController {
   private ChatView view;
@@ -25,12 +26,8 @@ public class ChatController {
 
     new Thread(() -> startServer()).start();
     view.onMessageActionPerformed(e -> sendmessage());
-    try {
-      String localIP = InetAddress.getLocalHost().getHostAddress();
-      view.setIpLabel(localIP);
-    } catch (UnknownHostException ex) {
-      view.setIpLabel("Unknown");
-    }
+    String localIP = NetworkScanner.getHostPrivateAddress().getHostAddress();
+    view.setIpLabel(localIP);
   }
 
   public ChatView getView() {
