@@ -18,9 +18,8 @@ public class NetworkScanner {
 
   public static List<String> getLocalEndPointAddress() {
     List<String> endpoints = new ArrayList<>();
-    InetAddress addr = getHostPrivateAddress();
 
-    String ip = addr.getHostAddress();
+    String ip = getHostPrivateAddress();
     String subnet = ip.substring(0, ip.lastIndexOf("."));
 
     for (int i = 1; i < 255; i++) {
