@@ -28,6 +28,9 @@ public class ChatController {
 
     view.onMessageActionPerformed(() -> sendmessage());
     view.onSendPressed(() -> {
+      if (clientSocket == null || clientSocket.isClosed()) {
+        startClient();
+      }
       sendmessage();
     });
   }
@@ -40,9 +43,11 @@ public class ChatController {
   public void startServer() {
     try (ServerSocket serversocket = new ServerSocket(SERVER_PORT)) {
       System.out.println("server is listening on port " + SERVER_PORT);
-      Socket socket = serversocket.accept();
+      clientSocket = serversocket.accept();
+      out = new PrintWriter(clientSocket.getOutputStream());
+      view.setConnectionStatus(ConnectionStatus.CONNECTED);
 
-      BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
       String message;
       while ((message = input.readLine()) != null) {
@@ -50,7 +55,7 @@ public class ChatController {
         view.insertMessage(message);
       }
 
-      socket.close();
+      clientSocket.close();
     } catch (IOException e) {
       System.err.println(e.getMessage());
       System.exit(1);
@@ -78,10 +83,6 @@ public class ChatController {
   }
 
   private void sendmessage() {
-    if (clientSocket == null || clientSocket.isClosed()) {
-      startClient();
-    }
-
     String message = view.getMessageText().trim();
     if (!message.isEmpty()) {
       out.println(message);
