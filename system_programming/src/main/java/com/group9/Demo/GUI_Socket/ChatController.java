@@ -22,9 +22,14 @@ public class ChatController {
     this.view = view;
 
     new Thread(() -> startServer()).start();
-    view.onMessageActionPerformed(e -> sendmessage());
+
     String localIP = NetworkScanner.getHostPrivateAddress();
     view.setIpLabel(localIP);
+
+    view.onMessageActionPerformed(() -> sendmessage());
+    view.onSendPressed(() -> {
+      sendmessage();
+    });
   }
 
   public ChatView getView() {
@@ -61,8 +66,12 @@ public class ChatController {
       view.setConnectionStatus(ConnectionStatus.CONNECTED);
     } catch (IOException e) {
       System.out.println("Host not found!");
-      JOptionPane.showMessageDialog(view, "Connection failed: ip address does not exist!", "connection error",
-        JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(
+        view,
+        "Connection failed: Host is not available!",
+        "connection error",
+        JOptionPane.ERROR_MESSAGE
+      );
       view.setConnectionStatus(ConnectionStatus.CONNECTION_FAILED);
       return;
     }

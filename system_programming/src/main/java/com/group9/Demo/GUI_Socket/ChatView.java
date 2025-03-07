@@ -84,12 +84,16 @@ public class ChatView extends JPanel {
     ipLabel.setText("My IP: " + label);
   }
 
-  public void onSendPressed(ActionListener listener) {
-    sendButton.addActionListener(listener);
+  public void onSendPressed(Runnable action) {
+    sendButton.addActionListener((e) -> {
+      action.run();
+    });
   }
 
-  public void onMessageActionPerformed(ActionListener listener) {
-    messageField.addActionListener(listener);
+  public void onMessageActionPerformed(Runnable action) {
+    messageField.addActionListener((e) -> {
+      action.run();
+    });
   }
 
   public void insertMessage(String message) {
